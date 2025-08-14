@@ -8,6 +8,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { AuthModule } from './routers/auth/auth.module';
 import { AdminModule } from './routers/admin/admin.module';
+import { ProductModule } from './routers/product/product.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AdminModule } from './routers/admin/admin.module';
     AuthModule,
     UserModule,
     AdminModule,
+    ProductModule,
   ],
   controllers: [],
   providers: [],
