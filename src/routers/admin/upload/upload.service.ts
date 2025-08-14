@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ImageDto } from './dtos/Image.dto';
 import sharp from 'sharp';
 import { mkdirp } from 'mkdirp';
+import {  existsSync, readdir, readdirSync, unlink, unlinkSync } from 'fs';
+import { join } from 'path';
 
 @Injectable()
 export class UploadService {
@@ -41,5 +43,13 @@ export class UploadService {
     }
 
     return { success: true, images: ImagesList };
+  }
+
+  async deleteImage(imagePath: string){
+    const filePath = decodeURIComponent(imagePath.split(`${process.env.API_PATH}/`)[1])
+     if(!existsSync(filePath)) throw new NotFoundException('this file done exist')
+        
+      unlinkSync(filePath)
+    return {success: true, message: 'image Deleted'}
   }
 }

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   FileTypeValidator,
   MaxFileSizeValidator,
   ParseFilePipe,
@@ -92,5 +93,11 @@ export class UploadController {
     @Query() imageOption: ImageDto,
   ) {
     return await this.UploadService.uploadMultipleImage(image, imageOption);
+  }
+
+
+  @Delete()
+  async deleteImages(@Query('image') image: string){
+    return await this.UploadService.deleteImage(image)
   }
 }
