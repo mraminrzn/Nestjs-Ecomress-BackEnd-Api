@@ -19,7 +19,11 @@ export class BrandService {
   }
 
   async findWithTitle(title: string) {
-    return await this.brandRepository.findOne({ where: { title } });
+    return await this.brandRepository.exists({ where: { title } });
+  }
+
+    async findWithId(id: number) {
+    return await this.brandRepository.exists({ where: { id } });
   }
 
   async findAllBrands() {

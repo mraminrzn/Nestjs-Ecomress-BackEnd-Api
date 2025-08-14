@@ -7,11 +7,17 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class BrandsService {
-  constructor(private readonly brandService: BrandService) {}
+  constructor(
+    private readonly brandService: BrandService
+  ) {}
 
   async create(brandData: BrandAndCategoryDto) {
     if (await this.brandService.findWithTitle(brandData.title))
       throw new ConflictException('Brand already exists');
     return await this.brandService.createBrand(brandData);
+  }
+
+  async findAll(){
+    return await this.brandService.findAllBrands()
   }
 }

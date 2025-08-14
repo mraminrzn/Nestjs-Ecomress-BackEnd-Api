@@ -13,7 +13,7 @@ import { AdminUsersService } from './adminUsers.service';
 import { ApiTags } from '@nestjs/swagger';
 import { UseAuthGaurd } from 'src/common/guards/auth.guard';
 
-@UseAuthGaurd(Role.ADMIN)
+// @UseAuthGaurd(Role.ADMIN)
 @Controller('/admin/users')
 @ApiTags('admin/ControlUsers')
 export class AdminUsersController {

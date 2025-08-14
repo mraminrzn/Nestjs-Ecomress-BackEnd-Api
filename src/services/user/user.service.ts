@@ -14,7 +14,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   async findAll() {
     return await this.userRepository.find({
@@ -29,11 +29,15 @@ export class UserService {
     if (!user && error) throw new NotFoundException('User not found');
     return user;
   }
-  async findByEmail(email: string, error: boolean = true) {
-    const user = await this.userRepository.findOne({ where: { email } });
-    // if (!user && error) throw new NotFoundException('User not found');
-    return user;
+
+  async findByEmail(email: string) {
+    const user = await this.userRepository.findOne({
+      where: { email: email },
+    });
+
+    return user ;
   }
+
 
   async create(user: UserDto) {
     const existingUser = await this.findByEmail(user.email);

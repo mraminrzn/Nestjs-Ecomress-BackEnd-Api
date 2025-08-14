@@ -1,9 +1,12 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Category } from './Category.entity';
 import { Brand } from './Brand.entity';
@@ -16,7 +19,9 @@ export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    unique: true
+  })
   name: string;
 
   @Column()
@@ -34,15 +39,31 @@ export class Product {
   @Column('simple-array')
   imagesUrl: string[];
 
-  @ManyToOne(() => Category, (item) => item.Products)
+  @ManyToOne(() => Category, (category) => category.Products)
+  @JoinColumn({ name: 'categoryId' })
   category: Category;
 
-  @ManyToOne(() => Brand, (item) => item.Products)
+  @Column()
+  categoryId: number;
+
+  @ManyToOne(() => Brand, (brand) => brand.Products)
+  @JoinColumn({ name: 'brandId' })
   brand: Brand;
+
+  @Column()
+  brandId: number;
 
   @OneToMany(() => CartItem, (item) => item.productId)
   cartItems: CartItem[];
 
   @Column({ default: true })
   isActive: boolean;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+
 }

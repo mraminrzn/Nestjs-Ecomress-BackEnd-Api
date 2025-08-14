@@ -18,8 +18,11 @@ export class CategoryService {
     return await this.CategoryRepository.save(Category);
   }
 
+    async findWithId(id: number) {
+    return await this.CategoryRepository.exists({ where: { id } });
+  }
   async findWithTitle(title: string) {
-    return await this.CategoryRepository.findOne({ where: { title } });
+    return await this.CategoryRepository.exists({ where: { title } });
   }
 
   async findAllCategorys() {

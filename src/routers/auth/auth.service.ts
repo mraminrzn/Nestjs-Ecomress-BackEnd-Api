@@ -1,8 +1,10 @@
 // src/auth/auth.service.ts
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { JsonwebtokenService } from 'src/services/jsonwebtoken/jsonwebtoken.service';
 import { MaielrService } from 'src/services/mailer/mailer.service';
@@ -23,14 +25,14 @@ export class AuthService {
   ) {}
 
   async signUp(user: UserDto) {
-    const userExcited = await this.userService.findByEmail(user.email, false);
+    const userExcited = await this.userService.findByEmail(user.email);
     if (userExcited) throw new ConflictException('User already exists');
     const createdUser = await this.userService.create({
       ...user,
       password: await this.HashService.generateHashPass(user.password),
     });
     const token = this.jsonwebtokenService.newToken(
-      { email: createdUser.email },
+      { id: createdUser.id },
       { expiresIn: '1h' },
     );
     await this.MailerService.sendVerifyEmail(token);
@@ -49,14 +51,18 @@ export class AuthService {
   }
 
   async VerifyEmail(token: string) {
+    
     const tokenData = await this.jsonwebtokenService.verifyToken(token);
-    await this.userService.update(tokenData.email, { Verified: true });
+    if(!tokenData.id) throw new BadRequestException('bad request')
+    await this.userService.update(tokenData.id, { Verified: true });
 
     return VerifyEmailHtml;
   }
 
   async signIn(session: any, user: SignInDto) {
     const foundedUser = await this.userService.findByEmail(user.email);
+    if(!foundedUser) throw new NotFoundException('the user not found ')
+
     if (!foundedUser?.Verified)
       throw new ForbiddenException('Email not verified');
     if (

@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { BrandsService } from './brands.service';
 import { BrandAndCategoryDto } from 'src/shared/dtos/brand&category.dto';
 import { UseAuthGaurd } from 'src/common/guards/auth.guard';
@@ -13,5 +13,9 @@ export class BrandsController {
   @Post('create')
   async createBrand(@Body() createBrandDto: BrandAndCategoryDto) {
     return await this.brandsService.create(createBrandDto);
+  }
+  @Get()
+  async finAllBrand(){
+    return this.brandsService.findAll()
   }
 }
